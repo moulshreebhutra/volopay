@@ -51,7 +51,7 @@ export default function Home() {
             You want someone who speaks to users, makes the product call, builds the first version with AI tools, connects the systems and takes it live. At Vudio.ai I did that with a founder, across product, customer success and design.
           </p>
           <div className="stats">
-            <div className="stat"><b>7x</b><span>ARR growth in two years, $30K to $200K</span></div>
+            <div className="stat"><b>30x</b><span>ARR growth in two years, $10K to $300K</span></div>
             <div className="stat"><b>~74%</b><span>activation lift from self-serve onboarding</span></div>
             <div className="stat"><b>13 → 4 days</b><span>turnaround, about 69% faster</span></div>
             <div className="stat"><b>1,000+</b><span>clients, including Shoppers Stop and Godrej</span></div>
