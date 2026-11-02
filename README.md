@@ -25,6 +25,9 @@ Volopay's help centre describes a setup with six areas: users and roles, departm
 - Not covered: approval conditions by category, project or merchant, delegation, budgets, card and bill-pay settings, payroll, flag rules.
 - The sample company is invented. I have not seen Volopay's admin screens or customer data.
 
+## Offline preview
+`preview/index.html` is the whole site (pitch page, studio and method page) as one self-contained file. Open it in any browser. The AI re-read button is off in that file.
+
 ## Run it
 ```bash
 npm install
