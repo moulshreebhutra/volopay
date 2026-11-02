@@ -3,6 +3,7 @@ import Link from "next/link";
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/manrope";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { ABOUT } from "@/lib/about";
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </nav>
         <div id="main">{children}</div>
+        <Analytics />
         <footer>
           <div className="wrap">
             <span>
