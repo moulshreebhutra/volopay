@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { AccountingTool, Currency, Module, Severity } from "@/lib/model";
 import { ACCOUNTING_TOOLS, CURRENCIES, MODULES, isUnresolved, money, unresolvedLabel } from "@/lib/model";
@@ -35,6 +36,7 @@ export default function Studio() {
   const [receiptAmount, setReceiptAmount] = useState(5000);
   const [memo, setMemo] = useState(false);
   const [tab, setTab] = useState<Tab>("findings");
+  const [filter, setFilter] = useState<Severity | "all">("all");
   const [aiAvailable, setAiAvailable] = useState(false);
   const [ai, setAi] = useState<{ text: string; parse: PolicyParse } | null>(null);
   const [aiBusy, setAiBusy] = useState(false);
@@ -97,10 +99,30 @@ export default function Studio() {
   const rangeCount = built.policyParse.modules.reduce((n, m) => n + m.ranges.length, 0);
 
   return (
-    <div className="wrap">
-      <div className="studio">
+    <div className="app">
+      <aside className="rail" aria-label="Studio sections">
+        {([["findings", "Checks", "M9 11l3 3 8-8M4 12v7a1 1 0 001 1h14"], ["policies", "Policies", "M4 6h16M4 12h16M4 18h10"], ["simulate", "Who approves?", "M4 12h4l3-7 4 14 3-7h2"], ["pack", "Setup pack", "M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"]] as [Tab, string, string][]).map(([k, l, d]) => (
+          <button key={k} aria-label={l} title={l} aria-current={tab === k} onClick={() => setTab(k)}><svg viewBox="0 0 24 24"><path d={d} /></svg></button>
+        ))}
+        <span className="sp" />
+        <Link href="/method" aria-label="Method" title="Method" style={{ color: "var(--label)", display: "grid", placeItems: "center", width: 40, height: 40 }}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8h.01M11 12h1v5h1" /></svg></Link>
+      </aside>
+      <div className="appmain">
+        <div className="topbar">
+          <span className="badge">Concept · independent prototype, not affiliated with Volopay · sample data is invented</span>
+          <span className="right">
+            <Link href="/method" className="helppill">Quick help</Link>
+            <span className="dot" aria-hidden><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 004 0" /></svg></span>
+            <span className="avatar"><b>MB</b>Moulshree</span>
+          </span>
+        </div>
+        <div className="content">
+          <p className="crumb">Setup Studio</p>
+          <h1 className="pagetitle">Approval policy</h1>
+          <p className="pagesub">Paste a team list and a policy in plain English. The studio builds a Volopay-shaped setup, checks it against rules from Volopay&apos;s own help pages, and lets you test any request before go-live. Your data stays in this browser.</p>
+      <div className="appgrid">
         {/* ------------------------- inputs ------------------------- */}
-        <div>
+        <div className="a-inputs">
           <div className="panel">
             <div className="row">
               <button className="btn" onClick={loadSample}>Load the sample company</button>
@@ -183,9 +205,29 @@ export default function Studio() {
           </div>
         </div>
 
+        {/* ------------------------- quick access + pending action ------------------------- */}
+        <aside className="a-rail panel" aria-label="Quick access and pending checks">
+          <h3 style={{ margin: 0 }}>Quick access</h3>
+          <div className="qa">
+            <button onClick={loadSample}><i className="g"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z" /></svg></i>Load sample</button>
+            <button onClick={() => fileRef.current?.click()}><i className="y"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M5 20h14" /></svg></i>Upload CSV</button>
+            <button onClick={() => download("people-template.csv", EMPTY_PEOPLE_TEMPLATE, "text/csv")}><i className="p"><svg viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" /></svg></i>Template</button>
+            <button onClick={clearAll}><i className="k"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3" /></svg></i>Clear</button>
+          </div>
+          <Link href="/method" className="viewall">View all checks</Link>
+          <div className="pend">
+            <h3>Pending action <em>{readiness.errors + readiness.warnings}</em></h3>
+            {([["error", "Fix before inviting", readiness.errors], ["warning", "Review", readiness.warnings], ["info", "Notes", readiness.infos]] as [Severity, string, number][]).map(([sev, l, n]) => (
+              <button key={sev} className={n === 0 ? "zero" : ""} onClick={() => { setFilter(sev); setTab("findings"); }}>
+                <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M4 12v7a1 1 0 001 1h14" /></svg><span>{l}</span><b>{n}</b>
+              </button>
+            ))}
+          </div>
+        </aside>
+
         {/* ------------------------- results ------------------------- */}
-        <div>
-          <div className="panel">
+        <div className="a-results">
+          <div className="panel lg">
             <div className="score">
               <div className="ring" style={{ ["--p" as string]: readiness.score, ["--c" as string]: readiness.score >= 80 ? "var(--ok)" : readiness.score >= 50 ? "#d98a00" : "var(--err)" }}>
                 <i>{readiness.score}</i>
@@ -206,11 +248,13 @@ export default function Studio() {
               ))}
             </div>
 
-            {tab === "findings" && <Findings findings={findings} empty={config.people.length === 0} />}
+            {tab === "findings" && <Findings findings={findings} empty={config.people.length === 0} filter={filter} setFilter={setFilter} />}
             {tab === "policies" && <Policies built={built} />}
             {tab === "simulate" && <Simulator built={built} />}
             {tab === "pack" && <Pack built={built} />}
           </div>
+        </div>
+      </div>
         </div>
       </div>
     </div>
@@ -219,8 +263,7 @@ export default function Studio() {
 
 /* ---------------------------------------------------------------- */
 
-function Findings({ findings, empty }: { findings: ReturnType<typeof build>["findings"]; empty: boolean }) {
-  const [filter, setFilter] = useState<Severity | "all">("all");
+function Findings({ findings, empty, filter, setFilter }: { findings: ReturnType<typeof build>["findings"]; empty: boolean; filter: Severity | "all"; setFilter: (f: Severity | "all") => void }) {
   if (empty) return <p className="muted">Load the sample company, or paste your team list, to see the checks.</p>;
   const shown = findings.filter((f) => filter === "all" || f.severity === filter);
   const count = (s: Severity) => findings.filter((f) => f.severity === s).length;

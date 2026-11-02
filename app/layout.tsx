@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import "@fontsource-variable/geist";
-import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/manrope";
 import "./globals.css";
 import { ABOUT } from "@/lib/about";
 
@@ -18,7 +18,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a className="skip" href="#main">Skip to content</a>
         <nav className="nav" aria-label="Main">
           <div className="wrap">
-            <Link href="/" className="brand">Moulshree × Volopay <span>· Setup Studio</span></Link>
+            <Link href="/" className="brand" aria-label="Setup Studio, home">
+              <i aria-hidden><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></i>
+              <span>Setup Studio<small>a concept for Volopay · by Moulshree</small></span>
+            </Link>
             <span className="links">
               <Link href="/#why">Why me</Link>
               <Link href="/#noticed">What I noticed</Link>

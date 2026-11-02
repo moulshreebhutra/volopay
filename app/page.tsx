@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ABOUT } from "@/lib/about";
+import Typewriter from "@/components/Typewriter";
 
 const SRC = {
   india: "https://www.volopay.com/in/",
@@ -20,7 +21,10 @@ export default function Home() {
       <section className="hero">
         <div className="wrap">
           <p className="eyebrow">Application · Founder&apos;s Office, Product · Bengaluru</p>
-          <h1 style={{ maxWidth: "20ch" }}>Hey Volopay, I&apos;d love to help you make setup the fast part.</h1>
+          <h1 style={{ maxWidth: "18ch" }}>
+            Hey Volopay, I&apos;d love to help you make setup the fast part.
+            <Typewriter phrases={["Write the approval policy.", "See who approves what.", "Catch mistakes before go-live.", "Hand off a setup pack."]} />
+          </h1>
           <p className="lede">
             I&apos;m Moulshree, an AI-native PM with a strong design sense. I&apos;ve spent 3+ years building and scaling 0→1 B2B SaaS products at a startup. I like figuring out what&apos;s worth solving, then building the first version myself.
           </p>
@@ -39,7 +43,7 @@ export default function Home() {
       </section>
 
       {/* ---------------------------------------------------------- why */}
-      <section id="why" className="sect white">
+      <section id="why" className="sect alt">
         <div className="wrap">
           <p className="eyebrow">Why hire me</p>
           <h2>The job post describes how I already work.</h2>
@@ -120,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* ---------------------------------------------------------- built */}
-      <section id="built" className="sect white">
+      <section id="built" className="sect alt">
         <div className="wrap">
           <p className="eyebrow">What I built</p>
           <h2>Setup Studio: write the approval policy, see who approves what before go-live.</h2>
@@ -165,7 +169,7 @@ export default function Home() {
       </section>
 
       {/* ---------------------------------------------------------- plan */}
-      <section id="plan" className="sect white">
+      <section id="plan" className="sect alt">
         <div className="wrap">
           <p className="eyebrow">My 30/60/90 day plan</p>
           <h2>Learn like a customer, ship small, then own an outcome.</h2>
